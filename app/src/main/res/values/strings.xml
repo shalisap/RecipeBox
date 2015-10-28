@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">RecipeBox</string>
+    <string name="browse_text">Browse Recipes</string>
+    <string name="favorites_text">Favorites</string>
+</resources>

@@ -3,18 +3,22 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--android:src="@drawable/banana_pancakes3"-->
+
         <ImageButton
             android:id="@+id/recipeBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/banana_pancakes3"
-            android:layout_gravity="center" />
+            android:layout_width="@dimen/browse_img_width"
+            android:layout_height="@dimen/browse_img_height"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/browse_img_topMargin"
+            android:scaleType="fitXY" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView"
+            android:id="@+id/recipeName"
             android:textSize="@dimen/browse_text_size"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/browse_text_botMargin"/>
 
 </LinearLayout>

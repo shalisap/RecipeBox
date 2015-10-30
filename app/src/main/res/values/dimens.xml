@@ -7,4 +7,11 @@
     <dimen name="menu_button_margin">4dp</dimen>
     <dimen name="menu_button_padding">10dp</dimen>
     <dimen name="browse_text_size">20sp</dimen>
+    <dimen name="browse_img_topMargin">10dp</dimen>
+    <dimen name="browse_img_width">300dp</dimen>
+    <dimen name="browse_img_height">200dp</dimen>
+    <dimen name="browse_text_botMargin">10dp</dimen>
+    <dimen name="instruction_num_size">15sp</dimen>
+    <dimen name="ingredient_height">35dp</dimen>
+
 </resources>

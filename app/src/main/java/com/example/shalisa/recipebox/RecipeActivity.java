@@ -45,13 +45,13 @@ public class RecipeActivity extends Activity {
 
 
             // display the quantity
-                TextView quantView = (TextView) ingView.findViewById(R.id.quantityItem);
-                String fractionQuantity = ingredient.getQuantityFractionString();
-                quantView.setText(Html.fromHtml(fractionQuantity));
+            TextView quantView = (TextView) ingView.findViewById(R.id.quantityItem);
+            String fractionQuantity = ingredient.getQuantityFractionString();
+            quantView.setText(Html.fromHtml(fractionQuantity));
 
-                // display the unit ingredient
-                TextView ing_View = (TextView) ingView.findViewById(R.id.ingredientItem);
-                ing_View.setText(ingredient.unitToString() + " " + ingredient.getIngredient());
+            // display the unit ingredient
+            TextView ing_View = (TextView) ingView.findViewById(R.id.ingredientItem);
+            ing_View.setText(ingredient.unitToString() + " " + ingredient.getIngredient());
 
             item.addView(ingView);
         }

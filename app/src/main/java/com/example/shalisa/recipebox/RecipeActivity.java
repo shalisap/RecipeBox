@@ -10,11 +10,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 public class RecipeActivity extends Activity {
 
@@ -35,51 +38,41 @@ public class RecipeActivity extends Activity {
         Picasso.with(this).load(recipe.getImgURL()).into(recipe_img);
 
         // set recipe ingredients
-        ListAdapter ing_adapter = new ArrayAdapter<Ingredient>(this,
-                R.layout.ingredient_item, R.id.ingredientItem,
-                recipe.getIngredients()) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
+        List<Ingredient> ingredients = recipe.getIngredients();
+        for (Ingredient ingredient : ingredients) {
+            LinearLayout item = (LinearLayout) findViewById(R.id.recipeIngredients);
+            View ingView = getLayoutInflater().inflate(R.layout.ingredient_item, null);
 
-                Ingredient ingredient = getItem(position);
 
-                // display the quantity
-                TextView quantView = (TextView) view.findViewById(R.id.quantityItem);
+            // display the quantity
+                TextView quantView = (TextView) ingView.findViewById(R.id.quantityItem);
                 String fractionQuantity = ingredient.getQuantityFractionString();
                 quantView.setText(Html.fromHtml(fractionQuantity));
 
                 // display the unit ingredient
-                TextView ing_View = (TextView) view.findViewById(R.id.ingredientItem);
+                TextView ing_View = (TextView) ingView.findViewById(R.id.ingredientItem);
                 ing_View.setText(ingredient.unitToString() + " " + ingredient.getIngredient());
-                return view;
-            }
-        };
-        ListView ing_lView = (ListView) findViewById(R.id.recipeIngredients);
-        ing_lView.setAdapter(ing_adapter);
+
+            item.addView(ingView);
+        }
 
         // set recipe instructions
-        ListAdapter inst_adapter = new ArrayAdapter<String>(this,
-                R.layout.instruction_item, R.id.instructionItem,
-                recipe.getInstructions()) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
+        List<String> instructions = recipe.getInstructions();
+        for (int i = 0; i < instructions.size(); i++) {
+            LinearLayout item = (LinearLayout) findViewById(R.id.recipeInstructions);
+            View instView = getLayoutInflater().inflate(R.layout.instruction_item, null);
 
-                String instruction = getItem(position);
+            // number the instruction
+            TextView num_View = (TextView) instView.findViewById(R.id.recipeNum);
+            num_View.setText(Integer.toString(i+1) + ".");
 
-                // number the instruction
-                TextView num_View = (TextView) view.findViewById(R.id.recipeNum);
-                num_View.setText(Integer.toString(position+1));
+            // display the instruction
+            TextView inst_View = (TextView) instView.findViewById(R.id.instructionItem);
+            inst_View.setText(instructions.get(i));
 
-                // display the instruction
-                TextView inst_View = (TextView) view.findViewById(R.id.instructionItem);
-                inst_View.setText(instruction);
-                return view;
-            }
-        };
-        ListView inst_lView = (ListView) findViewById(R.id.recipeInstructions);
-        inst_lView.setAdapter(inst_adapter);
+            item.addView(instView);
+
+        }
 
     }
 }

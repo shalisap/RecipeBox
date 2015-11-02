@@ -89,21 +89,25 @@ public class Ingredient implements Parcelable {
 
     /**
      * Converts a double to a fraction string and returns
-     * the formatted fraction as an html string..
-     * @return A html string fraction representation of the quantity.
+     * the formatted fraction as a string..
+     * @return A string fraction representation of the quantity.
      */
     public String getQuantityFractionString() {
         String[] fractionArr = getQuantityFraction();
         StringBuilder fractionStr = new StringBuilder();
         if (fractionArr[0] != "") {
             fractionStr.append(fractionArr[0]);
+            fractionStr.append(" ");
         }
         if (fractionArr[1] != "" && fractionArr[2] != "") {
-            fractionStr.append("<sup>");
+//            fractionStr.append("<sup>");
+//            fractionStr.append(fractionArr[1]);
+//            fractionStr.append("</sup>/<sub>");
+//            fractionStr.append(fractionArr[2]);
+//            fractionStr.append("</sub>");
             fractionStr.append(fractionArr[1]);
-            fractionStr.append("</sup>/<sub>");
+            fractionStr.append("/");
             fractionStr.append(fractionArr[2]);
-            fractionStr.append("</sub>");
         } return fractionStr.toString();
     }
 

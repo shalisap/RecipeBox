@@ -103,7 +103,7 @@ public class BrowseActivity extends Activity {
         ArrayList<Ingredient> ceggs_ing = new ArrayList<>();
         ceggs_ing.add(new Ingredient(2, Ingredient.Unit.NONE, "Eggs"));
         ceggs_ing.add(new Ingredient(1, Ingredient.Unit.TSP, "Butter"));
-        ceggs_ing.add(new Ingredient(0.5, Ingredient.Unit.CUP, "Cheese"));
+        ceggs_ing.add(new Ingredient(1.5, Ingredient.Unit.CUP, "Cheese"));
 
         ArrayList<String> ceggs_dir = new ArrayList<>();
         ceggs_dir.add("Heat butter in a skillet over medium heat. " +

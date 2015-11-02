@@ -13,5 +13,6 @@
     <dimen name="browse_text_botMargin">10dp</dimen>
     <dimen name="instruction_num_size">15sp</dimen>
     <dimen name="ingredient_height">35dp</dimen>
+    <dimen name="largest_width_quantity">35dp</dimen>
 
 </resources>

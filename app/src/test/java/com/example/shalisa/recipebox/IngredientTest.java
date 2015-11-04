@@ -3,7 +3,6 @@ package com.example.shalisa.recipebox;
 import org.junit.Test;
 
 import static org.hamcrest.core.IsEqual.equalTo;
-
 import static org.junit.Assert.*;
 
 public class IngredientTest {

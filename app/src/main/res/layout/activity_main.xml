@@ -11,14 +11,26 @@
     android:clipChildren="false"
     tools:context=".MainActivity">
 
-    <fragment
+    <TextView
+        android:id="@+id/appNameMenuText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/menu_space"
+        android:text="@string/app_name"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textSize="@dimen/menu_text_size"
+        android:editable="true"/>
+
+    <Button
+        android:id="@+id/browseBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/main_fragment"
-        class="com.example.shalisa.recipebox.MainFragment"
-        android:layout_gravity="center"
-        tools:layout="@layout/fragment_main">
+        android:text="@string/browse_text" />
 
-    </fragment>
+    <Button
+        android:id="@+id/favoritesBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/favorites_text"/>
 
 </LinearLayout>

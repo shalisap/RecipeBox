@@ -8,6 +8,7 @@ import java.util.List;
 
 public class Recipe implements Parcelable{
 
+    private int id;
     private String name;
     private List<Ingredient> ingredients;
     private List<String> instructions;

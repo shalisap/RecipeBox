@@ -8,9 +8,14 @@ public class Ingredient implements Parcelable {
         PINCH, TSP, TBSP, CUP, OUNCE, PINT, QUART, GALLON, NONE // TODO:CLASS TO CONVERT BETWEEN??
     }
 
+    private int id;
     private double quantity; // TODO:FRACTION instead?
     private String ingredient;
     private Unit unit;
+
+    public Ingredient() {
+
+    }
 
     public Ingredient(double quantity, Unit unit, String ingredient) {
         if (quantity < 0) {
@@ -55,6 +60,29 @@ public class Ingredient implements Parcelable {
                 return "gallon";
             default:
                 return "";
+        }
+    }
+
+    public static Unit stringToUnit(String str) {
+        switch(str.toLowerCase()) {
+            case "pinch":
+                return Unit.PINCH;
+            case "teaspoon":
+                return Unit.TSP;
+            case "tablespoon":
+                return Unit.TBSP;
+            case "cup":
+                return Unit.CUP;
+            case "ounce":
+                return Unit.OUNCE;
+            case "pint":
+                return Unit.PINT;
+            case "quart":
+                return Unit.QUART;
+            case "gallon":
+                return Unit.GALLON;
+            default:
+                return Unit.NONE;
         }
     }
 

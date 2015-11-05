@@ -13,10 +13,6 @@ public class Ingredient implements Parcelable {
     private String ingredient;
     private Unit unit;
 
-    public Ingredient() {
-
-    }
-
     public Ingredient(double quantity, Unit unit, String ingredient) {
         if (quantity < 0) {
             throw new IllegalArgumentException();

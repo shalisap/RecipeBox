@@ -51,6 +51,7 @@ public class RecipeDatabaseHelper extends SQLiteOpenHelper {
         getInstance(Context context) {
         if (sInstance == null) {
             sInstance = new RecipeDatabaseHelper(context);
+            prepopulateDatabase(sInstance);
         } return sInstance;
     }
 
@@ -260,5 +261,58 @@ public class RecipeDatabaseHelper extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
         }
+    }
+
+    // add sample recipes to database
+    private static void prepopulateDatabase(RecipeDatabaseHelper helper) {
+        // TODO: TEMP RECIPES - POSSIBLY GRAB DATA FROM API; Array or list?
+        ArrayList<Ingredient> pancakes_ing = new ArrayList<>();
+        pancakes_ing.add(new Ingredient(1, Ingredient.Unit.NONE, "Banana"));
+        pancakes_ing.add(new Ingredient(2, Ingredient.Unit.NONE, "Eggs"));
+        pancakes_ing.add(new Ingredient(1.0/8.0, Ingredient.Unit.TSP, "Baking Powder"));
+        pancakes_ing.add(new Ingredient(1, Ingredient.Unit.PINCH, "Ground Cinnamon"));
+        pancakes_ing.add(new Ingredient(2, Ingredient.Unit.TSP, "Butter"));
+
+        ArrayList<String> pancakes_dir = new ArrayList<>();
+        pancakes_dir.add("Mash banana in a bowl using a fork; add eggs, baking powder " +
+                "and cinnamon and mix batter well");
+        pancakes_dir.add("Heat butter in a skillet over medium heat. " +
+                "Spoon batter into skillet and cook until bubbles form " +
+                "and the edges are dry, 2 to 3 minutes. Flip and cook " +
+                "until browned on the other side, 2 to 3 minutes. " +
+                "Repeat with remaining batter.");
+        String pancakes_img = "http://www.onceuponachef.com/images/2013/01/banana-pancakes3.jpg";
+        Recipe pancakes = new Recipe("Pancakes", pancakes_ing, pancakes_dir, pancakes_img);
+//        recipes = new ArrayList<>();
+//        recipes.add(pancakes);
+
+
+        ArrayList<Ingredient> eggs_ing = new ArrayList<>();
+        eggs_ing.add(new Ingredient(2, Ingredient.Unit.NONE, "Eggs"));
+        eggs_ing.add(new Ingredient(1, Ingredient.Unit.TSP, "Butter"));
+
+        ArrayList<String> eggs_dir = new ArrayList<>();
+        eggs_dir.add("Heat butter in a skillet over medium heat. " +
+                "Scramble eggs");
+        String eggs_img = "http://toriavey.com/images/2014/06/How-to-Scramble-Eggs.jpg";
+        Recipe eggs = new Recipe("Eggs", eggs_ing, eggs_dir, eggs_img);
+//        recipes.add(eggs);
+
+        ArrayList<Ingredient> ceggs_ing = new ArrayList<>();
+        ceggs_ing.add(new Ingredient(2, Ingredient.Unit.NONE, "Eggs"));
+        ceggs_ing.add(new Ingredient(1, Ingredient.Unit.TSP, "Butter"));
+        ceggs_ing.add(new Ingredient(1.5, Ingredient.Unit.CUP, "Cheese"));
+
+        ArrayList<String> ceggs_dir = new ArrayList<>();
+        ceggs_dir.add("Heat butter in a skillet over medium heat. " +
+                "Scramble eggs. Add Cheese");
+        String ceggs_img = "http://foodnetwork.sndimg.com/content/dam/images/food/fullset/2011/3/31/0/RE0902H_sunnys-perfect-scrambled-cheesy-eggs_s4x3.jpg";
+        Recipe ceggs = new Recipe("Cheesy Eggs", ceggs_ing, ceggs_dir, ceggs_img);
+//        recipes.add(ceggs);
+
+        // Get singleton instance of database
+        helper.addRecipe(pancakes);
+        helper.addRecipe(eggs);
+        helper.addRecipe(ceggs);
     }
 }

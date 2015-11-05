@@ -8,10 +8,11 @@ public class Ingredient implements Parcelable {
         PINCH, TSP, TBSP, CUP, OUNCE, PINT, QUART, GALLON, NONE // TODO:CLASS TO CONVERT BETWEEN??
     }
 
-    private int id;
-    private double quantity; // TODO:FRACTION instead?
+    private double quantity;
     private String ingredient;
     private Unit unit;
+
+    public Ingredient() {}
 
     public Ingredient(double quantity, Unit unit, String ingredient) {
         if (quantity < 0) {

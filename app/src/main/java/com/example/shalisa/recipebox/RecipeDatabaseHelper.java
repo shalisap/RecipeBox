@@ -11,10 +11,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class RecipeDatabaseHelper extends SQLiteOpenHelper {
+import javax.inject.Inject;
+
+public class RecipeDatabaseHelper extends SQLiteOpenHelper
+        implements RecipeDatabase {
 
     // Make singleton
     private static RecipeDatabaseHelper sInstance;
@@ -41,19 +43,26 @@ public class RecipeDatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_INGREDIENTS_UNIT = "unit";
 
 
-    private RecipeDatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
+    @Inject
+    RecipeDatabaseHelper() {
+        super(BrowseActivity.browseContext, DATABASE_NAME, null, DATABASE_VERSION);
+//        prepopulateDatabase(this);
     }
+//
+//    private RecipeDatabaseHelper(Context context) {
+//        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+//    }
 
     // In an activity pass context, use singleton method -
     // RecipeDatabaseHelper helper = RecipeDatabaseHelper.getInstance(this);
-    public static synchronized RecipeDatabaseHelper
-        getInstance(Context context) {
-        if (sInstance == null) {
-            sInstance = new RecipeDatabaseHelper(context);
-            prepopulateDatabase(sInstance);
-        } return sInstance;
-    }
+//    public static synchronized RecipeDatabaseHelper
+//        getInstance() {
+//        if (sInstance == null) {
+//            sInstance = new RecipeDatabaseHelper();
+//            prepopulateDatabase(sInstance);
+//        } return sInstance;
+//    }
 
     // Called when database connection is being configured
     @Override
@@ -283,9 +292,6 @@ public class RecipeDatabaseHelper extends SQLiteOpenHelper {
                 "Repeat with remaining batter.");
         String pancakes_img = "http://www.onceuponachef.com/images/2013/01/banana-pancakes3.jpg";
         Recipe pancakes = new Recipe("Pancakes", pancakes_ing, pancakes_dir, pancakes_img);
-//        recipes = new ArrayList<>();
-//        recipes.add(pancakes);
-
 
         ArrayList<Ingredient> eggs_ing = new ArrayList<>();
         eggs_ing.add(new Ingredient(2, Ingredient.Unit.NONE, "Eggs"));
@@ -296,7 +302,6 @@ public class RecipeDatabaseHelper extends SQLiteOpenHelper {
                 "Scramble eggs");
         String eggs_img = "http://toriavey.com/images/2014/06/How-to-Scramble-Eggs.jpg";
         Recipe eggs = new Recipe("Eggs", eggs_ing, eggs_dir, eggs_img);
-//        recipes.add(eggs);
 
         ArrayList<Ingredient> ceggs_ing = new ArrayList<>();
         ceggs_ing.add(new Ingredient(2, Ingredient.Unit.NONE, "Eggs"));
@@ -308,7 +313,6 @@ public class RecipeDatabaseHelper extends SQLiteOpenHelper {
                 "Scramble eggs. Add Cheese");
         String ceggs_img = "http://foodnetwork.sndimg.com/content/dam/images/food/fullset/2011/3/31/0/RE0902H_sunnys-perfect-scrambled-cheesy-eggs_s4x3.jpg";
         Recipe ceggs = new Recipe("Cheesy Eggs", ceggs_ing, ceggs_dir, ceggs_img);
-//        recipes.add(ceggs);
 
         // Get singleton instance of database
         helper.addRecipe(pancakes);

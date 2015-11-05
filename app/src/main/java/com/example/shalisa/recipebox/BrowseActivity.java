@@ -1,6 +1,7 @@
 package com.example.shalisa.recipebox;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,18 +18,32 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.Module;
+import dagger.ObjectGraph;
+
 public class BrowseActivity extends Activity {
 
 //    List<Recipe> recipes;
+    @Inject RecipeDatabase database;
+    public static Context browseContext;
+    private List<Recipe> recipes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        browseContext = this;
 
         setContentView(R.layout.activity_browse);
 
-        RecipeDatabaseHelper databaseHelper = RecipeDatabaseHelper.getInstance(this);
-        List<Recipe> recipes = databaseHelper.getAllRecipes();
+//        database = RecipeDatabaseHelper.getInstance();
+        // TODO: Figure out where to set mockmode?
+        RecipeDatabaseModule.mockMode = false;
+
+        ObjectGraph objectGraph = ObjectGraph.create(new RecipeDatabaseModule());
+        database = objectGraph.get(RecipeDatabase.class);
+        recipes = database.getAllRecipes();
 
         // display
         ListAdapter adapter = new ArrayAdapter<Recipe>(BrowseActivity.this,

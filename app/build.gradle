@@ -37,9 +37,11 @@ dependencies {
     testCompile 'org.hamcrest:hamcrest-library:1.1'
 
     // Espresso
-    androidTestCompile 'com.android.support.test:runner:0.4'
-    androidTestCompile 'com.android.support.test:rules:0.4'
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
+    androidTestCompile 'com.android.support.test:runner:0.4.1'
+    androidTestCompile 'com.android.support.test:rules:0.4.1'
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.1') {
+        exclude group: 'javax.inject'
+    }
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.1'
 
     compile 'com.android.support:appcompat-v7:23.1.0'
@@ -47,8 +49,6 @@ dependencies {
     compile 'com.android.support:design:23.1.0'
 
     // Dagger
-
-//    provided 'com.squareup.dagger:dagger-compiler:1.2.1'
     compile 'com.squareup.dagger:dagger:1.2.2'
     provided 'com.squareup.dagger:dagger-compiler:1.2.2'
 }

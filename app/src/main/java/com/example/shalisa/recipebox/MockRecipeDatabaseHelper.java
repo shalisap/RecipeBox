@@ -11,21 +11,10 @@ public class MockRecipeDatabaseHelper implements RecipeDatabase {
     // List of recipes
     private List<Recipe> recipes;
 
-//    @Inject
     MockRecipeDatabaseHelper() {
         recipes = new ArrayList<>();
         prepopulateDatabase(this);
     }
-
-    // In an activity pass context, use singleton method -
-    // RecipeDatabaseHelper helper = RecipeDatabaseHelper.getInstance(this);
-//    public static synchronized MockRecipeDatabaseHelper
-//        getInstance() {
-//        if (sInstance == null) {
-//            sInstance = new MockRecipeDatabaseHelper();
-//            prepopulateDatabase(sInstance);
-//        } return sInstance;
-//    }
 
     // Adding new recipe
     public void addRecipe(Recipe recipe) {

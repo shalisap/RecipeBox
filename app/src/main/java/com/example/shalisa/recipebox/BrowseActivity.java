@@ -39,7 +39,6 @@ public class BrowseActivity extends Activity {
         RecipeDatabaseModule.mockMode = true;
 
         ObjectGraph objectGraph = ObjectGraph.create(new RecipeDatabaseModule());
-//        database = objectGraph.get(RecipeDatabase.class);
         objectGraph.inject(this);
         recipes = database.getAllRecipes();
 

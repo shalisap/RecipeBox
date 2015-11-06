@@ -20,6 +20,10 @@ public class IngredientTest {
         assertEquals(ing.getQuantity(), 0.75, 0.00000001);
     }
 
+    /**
+     * Tests when quantity set, getQuantityFraction returns
+     * the correct fraction formatted string.
+     */
     @Test
     public void doublesToFractionsCorrect() {
         final double half = 0.5;
@@ -32,30 +36,41 @@ public class IngredientTest {
         final double ten_threeFourths = 10.75;
 
         Ingredient ing = new Ingredient(half, Ingredient.Unit.CUP, "Banana");
-        assertThat(ing.getQuantityFraction(), equalTo(new String[] {"", "1", "2"}));
+        assertThat("Did not get 1/2 from 0.5.", ing.getQuantityFraction(),
+                equalTo(new String[] {"", "1", "2"}));
 
         ing.setQuantity(third);
-        assertThat(ing.getQuantityFraction(), equalTo(new String[]{"", "1", "3"}));
+        assertThat("Did not get 1/3 from 1.0/3.0", ing.getQuantityFraction(),
+                equalTo(new String[]{"", "1", "3"}));
 
         ing.setQuantity(truncated_third);
-        assertThat(ing.getQuantityFraction(), equalTo(new String[]{"", "1", "3"}));
+        assertThat("Did not get 1/3 from 0.3333", ing.getQuantityFraction(),
+                equalTo(new String[]{"", "1", "3"}));
 
         ing.setQuantity(fourth);
-        assertThat(ing.getQuantityFraction(), equalTo(new String[] {"", "1", "4"}));
+        assertThat("Did not get 1/4 from 0.25", ing.getQuantityFraction(),
+                equalTo(new String[] {"", "1", "4"}));
 
         ing.setQuantity(one);
-        assertThat(ing.getQuantityFraction(), equalTo(new String[] {"1", "", ""}));
+        assertThat("Did not get 1 from 1", ing.getQuantityFraction(),
+                equalTo(new String[] {"1", "", ""}));
 
         ing.setQuantity(five);
-        assertThat(ing.getQuantityFraction(), equalTo(new String[] {"5", "", ""}));
+        assertThat("Did not get 5 from 5", ing.getQuantityFraction(),
+                equalTo(new String[] {"5", "", ""}));
 
         ing.setQuantity(one_half);
-        assertThat(ing.getQuantityFraction(), equalTo(new String[] {"1", "1", "2"}));
+        assertThat("Did not get 1 1/2 from 1.5", ing.getQuantityFraction(),
+                equalTo(new String[] {"1", "1", "2"}));
 
         ing.setQuantity(ten_threeFourths);
-        assertThat(ing.getQuantityFraction(), equalTo(new String[] {"10", "3", "4"}));
+        assertThat("Did not get 10 3/4 from 10.75", ing.getQuantityFraction(),
+                equalTo(new String[] {"10", "3", "4"}));
     }
 
+    /**
+     *
+     */
     @Test
     public void doublesToFractionStringsCorrect() {
         final double half = 0.5;

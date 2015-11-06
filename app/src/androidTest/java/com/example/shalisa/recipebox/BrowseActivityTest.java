@@ -40,7 +40,7 @@ public class BrowseActivityTest {
      * Set up variable declarations.
      */
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         mBrowseActivity = mActivityRule.getActivity();
         recipeList = (ListView) mBrowseActivity.
                 findViewById(R.id.browseRecipes);
@@ -70,7 +70,7 @@ public class BrowseActivityTest {
                 withId(R.id.recipeBtn)).perform(click());
 
         intended(allOf(
-                hasComponent("com.example.shalisa.recipebox.RecipeActivity"),
+                hasComponent(RecipeActivity.class.getName()),
                 toPackage("com.example.shalisa.recipebox"),
                 hasExtra("recipe_key", recipeList.getItemAtPosition(firstPosition))
         ));
@@ -88,7 +88,7 @@ public class BrowseActivityTest {
                 withId(R.id.recipeBtn)).perform(click());
 
         intended(allOf(
-                hasComponent("com.example.shalisa.recipebox.RecipeActivity"),
+                hasComponent(RecipeActivity.class.getName()),
                 toPackage("com.example.shalisa.recipebox"),
                 hasExtra("recipe_key", recipeList.getItemAtPosition(lastPosition))
         ));

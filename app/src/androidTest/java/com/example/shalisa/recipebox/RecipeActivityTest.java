@@ -3,24 +3,36 @@ package com.example.shalisa.recipebox;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
+import android.support.test.espresso.intent.Intents;
+import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import dagger.ObjectGraph;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -39,18 +51,19 @@ public class RecipeActivityTest {
     private LinearLayout recipeIngreds;
     private LinearLayout recipeInstrs;
 
-    Recipe eggs;
-
     @Rule
     public ActivityTestRule<RecipeActivity> mActivityRule =
-            new ActivityTestRule<>(RecipeActivity.class);
+            new ActivityTestRule<>(RecipeActivity.class, true, false);
 
     /**
      * Set up variable declarations.
      */
     @Before
-    public void setUp() throws Exception {
-        // Create eggs recipe
+    public void setUp() {
+        Intents.init();
+
+        List<Recipe> recipes = new ArrayList<>();
+         //Create eggs recipe
         ArrayList<Ingredient> eggs_ing = new ArrayList<>();
 
         eggs_ing.add(new Ingredient(2, Ingredient.Unit.NONE, "Eggs"));
@@ -60,19 +73,21 @@ public class RecipeActivityTest {
         eggs_dir.add("Heat butter in a skillet over medium heat. " +
                 "Scramble eggs");
         String eggs_img = "http://toriavey.com/images/2014/06/How-to-Scramble-Eggs.jpg";
-        eggs = new Recipe("Eggs", eggs_ing, eggs_dir, eggs_img);
+        Recipe eggs = new Recipe("Eggs", eggs_ing, eggs_dir, eggs_img);
+        assertNotNull(eggs);
+        recipes.add(eggs);
 
         Intent intent = new Intent();
-        intent.putExtra("recipe_key", eggs);
+        intent.putExtra("recipe_key", recipes.get(0));
 
-        intending(not(isInternal())).respondWith(new
-                Instrumentation.ActivityResult(Activity.RESULT_OK, intent));
-        onView(withId(R.id.recipeBtn)).perform(click());
+        // start activity after putting extra
+        mActivityRule.launchActivity(intent);
 
         intended(allOf(
-                hasAction(is(equalTo(Intent.ACTION_CALL))),
-//                hasData(equalTo(eggs)),
-                toPackage("com.example.shalisa.recipebox.RecipeActivity")));
+                hasComponent(RecipeActivity.class.getName()),
+                toPackage("com.example.shalisa.recipebox"),
+                hasExtra("recipe_key", recipes.get(0))
+        ));
 
         mRecipeActivity = mActivityRule.getActivity();
         recipeName = (TextView) mRecipeActivity.findViewById(R.id.recipeTitle);
@@ -97,4 +112,11 @@ public class RecipeActivityTest {
         assertNotNull("recipeInstrs is null", recipeInstrs);
     }
 
+    /**
+     * After test, release intent.
+     */
+    @After
+    public void tearDown() {
+        Intents.release();
+    }
 }

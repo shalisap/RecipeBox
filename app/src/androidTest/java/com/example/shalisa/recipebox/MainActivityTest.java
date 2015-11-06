@@ -128,7 +128,7 @@ public class MainActivityTest {
         onView(withId(R.id.browseBtn)).check(matches(isClickable()));
         onView(withId(R.id.browseBtn)).perform(click());
         intended(allOf(
-                hasComponent("com.example.shalisa.recipebox.BrowseActivity"),
+                hasComponent(BrowseActivity.class.getName()),
                 toPackage("com.example.shalisa.recipebox")
         ));
     }

@@ -14,10 +14,8 @@ public class RecipeDatabaseModule {
     @Singleton
     public RecipeDatabase provideDatabase() {
         if (mockMode) {
-//            return MockRecipeDatabaseHelper.getInstance();
             return new MockRecipeDatabaseHelper();
         } return new RecipeDatabaseHelper();
-        //return RecipeDatabaseHelper.getInstance();
     }
 
 }

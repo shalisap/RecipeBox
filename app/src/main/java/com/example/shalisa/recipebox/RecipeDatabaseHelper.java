@@ -39,27 +39,10 @@ public class RecipeDatabaseHelper extends SQLiteOpenHelper
     private static final String KEY_INGREDIENTS_ING = "ingredient";
     private static final String KEY_INGREDIENTS_UNIT = "unit";
 
-
-
-//    @Inject
     RecipeDatabaseHelper() {
         super(BrowseActivity.browseContext, DATABASE_NAME, null, DATABASE_VERSION);
         prepopulateDatabase(this);
     }
-//
-//    private RecipeDatabaseHelper(Context context) {
-//        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-//    }
-
-    // In an activity pass context, use singleton method -
-    // RecipeDatabaseHelper helper = RecipeDatabaseHelper.getInstance(this);
-//    public static synchronized RecipeDatabaseHelper
-//        getInstance() {
-//        if (sInstance == null) {
-//            sInstance = new RecipeDatabaseHelper();
-//            prepopulateDatabase(sInstance);
-//        } return sInstance;
-//    }
 
     // Called when database connection is being configured
     @Override
@@ -104,7 +87,7 @@ public class RecipeDatabaseHelper extends SQLiteOpenHelper
     public void addRecipe(Recipe recipe) {
         // open database for writing
         SQLiteDatabase db = this.getWritableDatabase();
-        long recipeId = -1;
+        long recipeId;
 
         db.beginTransaction();
         try {
@@ -140,8 +123,8 @@ public class RecipeDatabaseHelper extends SQLiteOpenHelper
                 ContentValues values = new ContentValues();
                 values.put(KEY_RECIPE_ING_ID_FK, recipeId); // Add foreign key
                 values.put(KEY_INGREDIENTS_QUANTITY, ingredient.getQuantity());
-                values.put(KEY_INGREDIENTS_UNIT, ingredient.unitToString());
-                values.put(KEY_INGREDIENTS_ING, ingredient.getIngredient());
+                values.put(KEY_INGREDIENTS_UNIT, ingredient.getUnitString());
+                values.put(KEY_INGREDIENTS_ING, ingredient.getName());
 
                 // try add ingredient
                 db.insertOrThrow(TABLE_INGREDIENTS, null, values);

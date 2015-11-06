@@ -36,15 +36,14 @@ public class RecipeActivity extends Activity {
             LinearLayout item = (LinearLayout) findViewById(R.id.recipeIngredients);
             View ingView = getLayoutInflater().inflate(R.layout.ingredient_item, null);
 
-
             // display the quantity
             TextView quantView = (TextView) ingView.findViewById(R.id.quantityItem);
-            String fractionQuantity = ingredient.getQuantityFractionString();
-            quantView.setText(Html.fromHtml(fractionQuantity));
+            String fractionQuantity = ingredient.getQuantityString();
+            quantView.setText(fractionQuantity);
 
             // display the unit ingredient
             TextView ing_View = (TextView) ingView.findViewById(R.id.ingredientItem);
-            ing_View.setText(ingredient.unitToString() + " " + ingredient.getIngredient());
+            ing_View.setText(ingredient.getUnitString() + " " + ingredient.getName());
 
             item.addView(ingView);
         }

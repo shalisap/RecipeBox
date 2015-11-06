@@ -1,20 +1,37 @@
 package com.example.shalisa.recipebox;
 
+import android.app.Activity;
+import android.app.Instrumentation;
 import android.content.Intent;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
-import android.test.ActivityInstrumentationTestCase2;
+import android.support.test.runner.AndroidJUnit4;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 
-public class RecipeActivityTest extends
-        ActivityInstrumentationTestCase2<RecipeActivity> {
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.Intents.intending;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertNotNull;
+
+@RunWith(AndroidJUnit4.class)
+public class RecipeActivityTest {
 
     private RecipeActivity mRecipeActivity;
     private TextView recipeName;
@@ -24,26 +41,15 @@ public class RecipeActivityTest extends
 
     Recipe eggs;
 
-    public RecipeActivityTest() {
-        super(RecipeActivity.class);
-    }
-
     @Rule
-    public ActivityTestRule<RecipeActivity> intentsRule =
-            new ActivityTestRule<>(RecipeActivity.class); // touch mode, launch activity
+    public ActivityTestRule<RecipeActivity> mActivityRule =
+            new ActivityTestRule<>(RecipeActivity.class);
 
     /**
      * Set up variable declarations.
      */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-
-        // prevents the UI control from taking focus when you click programmatically.
-        setActivityInitialTouchMode(true);
-
+    @Before
+    public void setUp() throws Exception {
         // Create eggs recipe
         ArrayList<Ingredient> eggs_ing = new ArrayList<>();
 
@@ -58,9 +64,17 @@ public class RecipeActivityTest extends
 
         Intent intent = new Intent();
         intent.putExtra("recipe_key", eggs);
-        setActivityIntent(intent);
 
-        mRecipeActivity = getActivity();
+        intending(not(isInternal())).respondWith(new
+                Instrumentation.ActivityResult(Activity.RESULT_OK, intent));
+        onView(withId(R.id.recipeBtn)).perform(click());
+
+        intended(allOf(
+                hasAction(is(equalTo(Intent.ACTION_CALL))),
+//                hasData(equalTo(eggs)),
+                toPackage("com.example.shalisa.recipebox.RecipeActivity")));
+
+        mRecipeActivity = mActivityRule.getActivity();
         recipeName = (TextView) mRecipeActivity.findViewById(R.id.recipeTitle);
         recipeImg = (ImageView) mRecipeActivity.findViewById(R.id.recipeImg);
         recipeIngreds = (LinearLayout) mRecipeActivity.

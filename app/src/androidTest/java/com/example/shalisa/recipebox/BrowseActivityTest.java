@@ -1,8 +1,7 @@
 package com.example.shalisa.recipebox;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.test.ActivityInstrumentationTestCase2;
+import android.support.test.runner.AndroidJUnit4;
 import android.test.UiThreadTest;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -10,42 +9,39 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.allOf;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-public class BrowseActivityTest extends
-        ActivityInstrumentationTestCase2<BrowseActivity> {
+@RunWith(AndroidJUnit4.class)
+public class BrowseActivityTest {
+
+    @Rule
+    public IntentsTestRule<BrowseActivity> mActivityRule =
+            new IntentsTestRule<>(BrowseActivity.class);
 
     private BrowseActivity mBrowseActivity;
     private ListView recipeList;
     private int recipeCount;
 
-    public BrowseActivityTest() {
-        super(BrowseActivity.class);
-    }
-
     /**
      * Set up variable declarations.
      */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-
-        // prevents the UI control from taking focus when you click programmatically.
-        setActivityInitialTouchMode(true);
-
-        mBrowseActivity = getActivity();
+    @Before
+    public void setUp() throws Exception {
+        mBrowseActivity = mActivityRule.getActivity();
         recipeList = (ListView) mBrowseActivity.
                 findViewById(R.id.browseRecipes);
         recipeCount = recipeList.getCount();
@@ -56,15 +52,11 @@ public class BrowseActivityTest extends
      * that app and test code were configured correctly.
      */
     @Test
-    public void testPreconditions() {
+    public void testPreconditionsBrowseActivity() {
         assertNotNull("mBrowseActivity is null", mBrowseActivity);
         assertNotNull("recipeList is null", recipeList);
         assertNotNull("recipeCount is null", recipeCount);
     }
-
-    @Rule
-    public IntentsTestRule<BrowseActivity> mActivityRule =
-            new IntentsTestRule<>(BrowseActivity.class);
 
     /**
      * Checks that RecipeActivity is launched properly given
@@ -76,8 +68,12 @@ public class BrowseActivityTest extends
         int firstPosition = recipeList.getFirstVisiblePosition();
         onData(allOf()).atPosition(firstPosition).onChildView(
                 withId(R.id.recipeBtn)).perform(click());
-        intended(toPackage("com.example.shalisa.recipebox.RecipeActivity"));
-        intended(hasExtra("recipe_key", firstPosition));
+
+        intended(allOf(
+                hasComponent("com.example.shalisa.recipebox.RecipeActivity"),
+                toPackage("com.example.shalisa.recipebox"),
+                hasExtra("recipe_key", recipeList.getItemAtPosition(firstPosition))
+        ));
     }
 
     /**
@@ -89,9 +85,13 @@ public class BrowseActivityTest extends
     public void triggerIntentTestLastToRecipeActivity() {
         int lastPosition = recipeList.getLastVisiblePosition();
         onData(allOf()).atPosition(lastPosition).onChildView(
-                withId(R.id.recipeBtn)).perform(scrollTo(), click());
-        intended(toPackage("com.example.shalisa.recipebox.RecipeActivity"));
-        intended(hasExtra("recipe_key", recipeList.getItemAtPosition(lastPosition)));
+                withId(R.id.recipeBtn)).perform(click());
+
+        intended(allOf(
+                hasComponent("com.example.shalisa.recipebox.RecipeActivity"),
+                toPackage("com.example.shalisa.recipebox"),
+                hasExtra("recipe_key", recipeList.getItemAtPosition(lastPosition))
+        ));
     }
 
     /**

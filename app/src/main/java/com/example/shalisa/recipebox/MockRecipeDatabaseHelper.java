@@ -1,19 +1,7 @@
 package com.example.shalisa.recipebox;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 public class MockRecipeDatabaseHelper implements RecipeDatabase {
 
@@ -23,10 +11,10 @@ public class MockRecipeDatabaseHelper implements RecipeDatabase {
     // List of recipes
     private List<Recipe> recipes;
 
-    @Inject
+//    @Inject
     MockRecipeDatabaseHelper() {
         recipes = new ArrayList<>();
-//        prepopulateDatabase(this);
+        prepopulateDatabase(this);
     }
 
     // In an activity pass context, use singleton method -

@@ -1,7 +1,6 @@
 package com.example.shalisa.recipebox;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -12,8 +11,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 public class RecipeDatabaseHelper extends SQLiteOpenHelper
         implements RecipeDatabase {
@@ -44,10 +41,10 @@ public class RecipeDatabaseHelper extends SQLiteOpenHelper
 
 
 
-    @Inject
+//    @Inject
     RecipeDatabaseHelper() {
         super(BrowseActivity.browseContext, DATABASE_NAME, null, DATABASE_VERSION);
-//        prepopulateDatabase(this);
+        prepopulateDatabase(this);
     }
 //
 //    private RecipeDatabaseHelper(Context context) {

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -15,12 +14,10 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import dagger.Module;
 import dagger.ObjectGraph;
 
 public class BrowseActivity extends Activity {
@@ -39,10 +36,11 @@ public class BrowseActivity extends Activity {
 
 //        database = RecipeDatabaseHelper.getInstance();
         // TODO: Figure out where to set mockmode?
-        RecipeDatabaseModule.mockMode = false;
+        RecipeDatabaseModule.mockMode = true;
 
         ObjectGraph objectGraph = ObjectGraph.create(new RecipeDatabaseModule());
-        database = objectGraph.get(RecipeDatabase.class);
+//        database = objectGraph.get(RecipeDatabase.class);
+        objectGraph.inject(this);
         recipes = database.getAllRecipes();
 
         // display

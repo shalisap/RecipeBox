@@ -1,52 +1,47 @@
 package com.example.shalisa.recipebox;
 
-import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.test.ActivityInstrumentationTestCase2;
-import android.test.ViewAsserts;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.support.test.runner.AndroidJUnit4;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.PositionAssertions.isAbove;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
+import static org.junit.Assert.assertNotNull;
 
-public class MainActivityTest extends
-        ActivityInstrumentationTestCase2<MainActivity> {
+@RunWith(AndroidJUnit4.class)
+public class MainActivityTest {
+
+    @Rule
+    public IntentsTestRule<MainActivity> mActivityRule =
+            new IntentsTestRule<>(MainActivity.class);
 
     private MainActivity mMainActivity;
     private TextView appName;
     private Button browseButton;
     private Button favoritesButton;
 
-
-    public MainActivityTest() {
-        super(MainActivity.class);
-    }
-
     /**
      * Set up variable declarations.
      */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-
-        // prevents the UI control from taking focus when you click programmatically.
-        setActivityInitialTouchMode(true);
-
-        mMainActivity = getActivity();
+    @Before
+    public void setUp() {
+        mMainActivity = mActivityRule.getActivity();
         appName = (TextView) mMainActivity.
                 findViewById(R.id.appNameMenuText);
         browseButton = (Button) mMainActivity.
@@ -73,56 +68,43 @@ public class MainActivityTest extends
      */
     @Test
     public void testMainActivityTextView_labelText() {
-        final String expected =
-                mMainActivity.getString(R.string.app_name);
-        final String actual = appName.getText().toString();
-        assertEquals(expected, actual);
+        final String actualText = getTextFromStringXML(R.string.app_name);
+        compareText(R.id.appNameMenuText, actualText);
     }
 
     /**
-     * Verify BrowseButton is displayed correctly in the activity.
-     * Also checks that text of the Browse Button that is set by layout is
-     * the same as the expected text defined in strings.xml.
+     * Compares text of given id to an actual string.
      */
-    @Test
-    public void testMainActivityBrowseButton_layout() {
-        final View decorView = mMainActivity.getWindow().getDecorView();
-        ViewAsserts.assertOnScreen(decorView, browseButton);
-        final ViewGroup.LayoutParams layoutParams =
-                browseButton.getLayoutParams();
-        assertNotNull(layoutParams);
-        assertEquals(layoutParams.width,
-                WindowManager.LayoutParams.MATCH_PARENT);
-        assertEquals(layoutParams.height,
-                WindowManager.LayoutParams.WRAP_CONTENT);
-
-        final String expected =
-                mMainActivity.getString(R.string.browse_text);
-        final String actual = browseButton.getText().toString();
-        assertEquals(expected, actual);
+    public ViewInteraction compareText(int expected_id, String actual) {
+        return onView(withId(expected_id)).check(matches(withText(actual)));
     }
 
     /**
-     * Verify FavoritesButton is displayed correctly in the activity.
-     * Also checks that text of the Favorites Button that is set by layout is
-     * the same as the expected text defined in strings.xml.
+     * Given an id, returns the text from the
+     * corresponding string.xml.
+     */
+    public String getTextFromStringXML(int id) {
+        return mActivityRule.getActivity().getString(id);
+    }
+
+    /**
+     * Verify BrowseButton and FavoritesButton is displayed correctly in the activity.
+     * Check that text of the buttons that are set by layout is
+     * the same as the expected text defined in strings.xml. Also
+     * check the browsebutton is above the favoritesbutton.
      */
     @Test
-    public void testMainActivityFavoritesButton_layout() {
-        final View decorView = mMainActivity.getWindow().getDecorView();
-        ViewAsserts.assertOnScreen(decorView, favoritesButton);
-        final ViewGroup.LayoutParams layoutParams =
-                favoritesButton.getLayoutParams();
-        assertNotNull(layoutParams);
-        assertEquals(layoutParams.width,
-                WindowManager.LayoutParams.MATCH_PARENT);
-        assertEquals(layoutParams.height,
-                WindowManager.LayoutParams.WRAP_CONTENT);
+    public void mainActivityButtons_layoutAndLabel() {
+        // Browse button text
+        final String actualBrowse = getTextFromStringXML(R.string.browse_text);
+        compareText(R.id.browseBtn, actualBrowse);
 
-        final String expected =
-                mMainActivity.getString(R.string.favorites_text);
-        final String actual = favoritesButton.getText().toString();
-        assertEquals(expected, actual);
+        // Favorites button text
+        final String actualFav = getTextFromStringXML(R.string.favorites_text);
+        compareText(R.id.favoritesBtn, actualFav);
+
+        // Check that the browse button is above the favorites button
+        onView(withId(R.id.browseBtn)).check(isAbove(withId(R.id.favoritesBtn)));
     }
 
     /**
@@ -136,15 +118,19 @@ public class MainActivityTest extends
 //        onView(withId(R.id.browseBtn)).perform(click()); // press the browse button
 //        onData(withId(R.id.)).check(matches(withText("Pancakes")));
     }
-//
-    @Rule
-    public IntentsTestRule<MainActivity> intentsRule =
-            new IntentsTestRule<>(MainActivity.class, true, false); // touch mode, launch activity
 
+    /**
+     * Test that BrowseActivity is intended when the
+     * browse button is clicked.
+     */
     @Test
-    public void triggerIntentTestOnBrowseButton() {
+    public void testMainActivityBrowseButton_toBrowseActivityOnClick() {
+        onView(withId(R.id.browseBtn)).check(matches(isClickable()));
         onView(withId(R.id.browseBtn)).perform(click());
-        intended(toPackage("com.example.shalisa.recipebox.BrowseActivity"));
+        intended(allOf(
+                hasComponent("com.example.shalisa.recipebox.BrowseActivity"),
+                toPackage("com.example.shalisa.recipebox")
+        ));
     }
 
 }

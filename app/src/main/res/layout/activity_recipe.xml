@@ -13,12 +13,24 @@
     android:clipChildren="false"
     android:layout_margin="@dimen/browse_text_botMargin">
 
-    <TextView
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/recipeTitle"
-        android:textSize="@dimen/browse_text_size"/>
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/recipeTitle"
+            android:layout_alignParentLeft="true"
+            android:textSize="@dimen/menu_text_size"/>
 
+        <ImageButton android:id="@+id/favoriteStar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/star"
+            android:background="#00ffffff"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/recipeImg"

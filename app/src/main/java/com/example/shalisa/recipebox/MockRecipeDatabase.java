@@ -1,20 +1,31 @@
 package com.example.shalisa.recipebox;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
-public class MockRecipeDatabaseHelper implements RecipeDatabase {
+public class MockRecipeDatabase implements Database {
 
-    // Make singleton
-    private static MockRecipeDatabaseHelper sInstance;
+    private static MockRecipeDatabase sInstance;
 
     // List of recipes
     private List<Recipe> recipes;
 
-    MockRecipeDatabaseHelper() {
-        recipes = new ArrayList<>();
-        prepopulateDatabase(this);
+    public static synchronized MockRecipeDatabase getInstance() {
+        if (sInstance == null) {
+            sInstance = new MockRecipeDatabase();
+            sInstance.prepopulateDatabase();
+        } return sInstance;
     }
+
+    private MockRecipeDatabase() {
+       recipes = new ArrayList<>();
+    }
+
+//    MockRecipeDatabase() {
+//        recipes = new ArrayList<>();
+//        prepopulateDatabase(this); // TODO: FOR MOCK WHERE TO PREPOPULATE?
+//    }
 
     // Adding new recipe
     public void addRecipe(Recipe recipe) {
@@ -36,8 +47,10 @@ public class MockRecipeDatabaseHelper implements RecipeDatabase {
         recipes = new ArrayList<>();
     }
 
-    // add sample recipes to database
-    private static void prepopulateDatabase(MockRecipeDatabaseHelper helper) {
+    /**
+     * Prepopulate the given database with sample recipes.
+     */
+    private void prepopulateDatabase() {
         // TODO: TEMP RECIPES - POSSIBLY GRAB DATA FROM API; Array or list?
         ArrayList<Ingredient> pancakes_ing = new ArrayList<>();
         pancakes_ing.add(new Ingredient(1, Ingredient.Unit.NONE, "Banana"));
@@ -46,7 +59,7 @@ public class MockRecipeDatabaseHelper implements RecipeDatabase {
         pancakes_ing.add(new Ingredient(1, Ingredient.Unit.PINCH, "Ground Cinnamon"));
         pancakes_ing.add(new Ingredient(2, Ingredient.Unit.TSP, "Butter"));
 
-        ArrayList<String> pancakes_dir = new ArrayList<>();
+        LinkedList<String> pancakes_dir = new LinkedList<>();
         pancakes_dir.add("Mash banana in a bowl using a fork; add eggs, baking powder " +
                 "and cinnamon and mix batter well");
         pancakes_dir.add("Heat butter in a skillet over medium heat. " +
@@ -61,14 +74,14 @@ public class MockRecipeDatabaseHelper implements RecipeDatabase {
         eggs_ing.add(new Ingredient(2, Ingredient.Unit.NONE, "Eggs"));
         eggs_ing.add(new Ingredient(1, Ingredient.Unit.TSP, "Butter"));
 
-        ArrayList<String> eggs_dir = new ArrayList<>();
+        LinkedList<String> eggs_dir = new LinkedList<>();
         eggs_dir.add("Heat butter in a skillet over medium heat. " +
                 "Scramble eggs");
         String eggs_img = "http://toriavey.com/images/2014/06/How-to-Scramble-Eggs.jpg";
         Recipe eggs = new Recipe("Eggs", eggs_ing, eggs_dir, eggs_img);
 
         // Get singleton instance of database
-        helper.addRecipe(pancakes);
-        helper.addRecipe(eggs);
+        addRecipe(pancakes);
+        addRecipe(eggs);
     }
 }

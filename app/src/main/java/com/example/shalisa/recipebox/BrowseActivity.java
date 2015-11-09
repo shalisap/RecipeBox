@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -23,7 +24,7 @@ import dagger.ObjectGraph;
 public class BrowseActivity extends Activity {
 
 //    List<Recipe> recipes;
-    @Inject RecipeDatabase database;
+    @Inject Database database;
     public static Context browseContext;
     private List<Recipe> recipes;
 
@@ -36,11 +37,12 @@ public class BrowseActivity extends Activity {
 
 //        database = RecipeDatabaseHelper.getInstance();
         // TODO: Figure out where to set mockmode?
-        RecipeDatabaseModule.mockMode = true;
+        DatabaseModule.mockMode = false;
 
-        ObjectGraph objectGraph = ObjectGraph.create(new RecipeDatabaseModule());
+        ObjectGraph objectGraph = ObjectGraph.create(new DatabaseModule());
         objectGraph.inject(this);
         recipes = database.getAllRecipes();
+        Log.d("DATABASE", recipes.toString());
 
         // display
         ListAdapter adapter = new ArrayAdapter<Recipe>(BrowseActivity.this,
@@ -60,6 +62,7 @@ public class BrowseActivity extends Activity {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(BrowseActivity.this, RecipeActivity.class);
+                        Log.d("DATABASE", recipe.toString());
                         intent.putExtra("recipe_key", recipe);
                         startActivity(intent);
                     }

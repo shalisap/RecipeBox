@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -69,7 +70,7 @@ public class RecipeActivityTest {
         eggs_ing.add(new Ingredient(2, Ingredient.Unit.NONE, "Eggs"));
         eggs_ing.add(new Ingredient(1, Ingredient.Unit.TSP, "Butter"));
 
-        ArrayList<String> eggs_dir = new ArrayList<>();
+        LinkedList<String> eggs_dir = new LinkedList<>();
         eggs_dir.add("Heat butter in a skillet over medium heat. " +
                 "Scramble eggs");
         String eggs_img = "http://toriavey.com/images/2014/06/How-to-Scramble-Eggs.jpg";

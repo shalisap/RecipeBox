@@ -1,8 +1,10 @@
 package com.example.shalisa.recipebox;
 
+import android.content.Intent;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -11,8 +13,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.HashMap;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.PositionAssertions.isAbove;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
@@ -32,22 +37,34 @@ public class MainActivityTest {
             new IntentsTestRule<>(MainActivity.class);
 
     private MainActivity mMainActivity;
-    private TextView appName;
+    private TextView welcomeText;
     private Button browseButton;
     private Button favoritesButton;
+    private Button addRecipeButton;
+    private Button logoutButton;
+    private SessionManager session;
 
     /**
      * Set up variable declarations.
      */
     @Before
     public void setUp() {
+        session = new SessionManager(
+                mActivityRule.getActivity());
+        session.deleteLoginSession();
+        session.createLoginSession("Shalisa");
+
         mMainActivity = mActivityRule.getActivity();
-        appName = (TextView) mMainActivity.
-                findViewById(R.id.appNameMenuText);
+        welcomeText = (TextView) mMainActivity.
+                findViewById(R.id.welcomeText);
         browseButton = (Button) mMainActivity.
                 findViewById(R.id.browseBtn);
         favoritesButton = (Button) mMainActivity.
                 findViewById(R.id.favoritesBtn);
+        addRecipeButton = (Button) mMainActivity.
+                findViewById(R.id.addRecipeBtn);
+        logoutButton = (Button) mMainActivity.
+                findViewById(R.id.logoutBtn);
     }
 
     /**
@@ -57,7 +74,7 @@ public class MainActivityTest {
     @Test
     public void testPreconditionsMainActivity() {
         assertNotNull("mMainActivity is null", mMainActivity);
-        assertNotNull("appName is null", appName);
+        assertNotNull("welcomeText is null", welcomeText);
         assertNotNull("browseButton is null", browseButton);
         assertNotNull("favoritesButton is null", favoritesButton);
     }
@@ -68,8 +85,11 @@ public class MainActivityTest {
      */
     @Test
     public void testMainActivityTextView_labelText() {
-        final String actualText = getTextFromStringXML(R.string.app_name);
-        compareText(R.id.appNameMenuText, actualText);
+        HashMap<String, String> user = session.getUserDetails();
+        String username = user.get(SessionManager.KEY_USERNAME);
+        String actualWelcome = "Welcome " + username;
+
+        compareText(R.id.welcomeText, actualWelcome);
     }
 
     /**
@@ -88,10 +108,12 @@ public class MainActivityTest {
     }
 
     /**
-     * Verify BrowseButton and FavoritesButton is displayed correctly in the activity.
+     * Verify BrowseButtonm FavoritesButton, and LogoutButton
+     * are displayed correctly in the activity.
      * Check that text of the buttons that are set by layout is
      * the same as the expected text defined in strings.xml. Also
-     * check the browsebutton is above the favoritesbutton.
+     * check the browsebutton is above the favoritesbutton, which is above
+     * the logoutbutton.
      */
     @Test
     public void mainActivityButtons_layoutAndLabel() {
@@ -103,8 +125,22 @@ public class MainActivityTest {
         final String actualFav = getTextFromStringXML(R.string.favorites_text);
         compareText(R.id.favoritesBtn, actualFav);
 
-        // Check that the browse button is above the favorites button
-        onView(withId(R.id.browseBtn)).check(isAbove(withId(R.id.favoritesBtn)));
+        // Add recipes button text
+        final String actualAdd = getTextFromStringXML(R.string.add_recipe_text);
+        compareText(R.id.addRecipeBtn, actualAdd);
+
+        // Logout button text
+        final String actualLogout = getTextFromStringXML(R.string.logout_text);
+        compareText(R.id.logoutBtn, actualLogout);
+
+        // Check that the browse button is above the add recipes button
+        onView(withId(R.id.browseBtn)).check(isAbove(withId(R.id.addRecipeBtn)));
+
+        // Check that the add recipes button is above the favorites button
+        onView(withId(R.id.addRecipeBtn)).check(isAbove(withId(R.id.favoritesBtn)));
+
+        // Check that the favorites button is above the logout button
+        onView(withId(R.id.favoritesBtn)).check(isAbove(withId(R.id.logoutBtn)));
     }
 
     /**
@@ -113,7 +149,7 @@ public class MainActivityTest {
     @Test
     public void testMainActivityButton_nextActivityLaunchedWithIntent() {
         onView(withId(R.id.favoritesBtn)).perform(click()); // press the browse button
-        onView(withId(R.id.appNameMenuText)).check(matches(withText("HELLO")));
+        onView(withId(R.id.welcomeText)).check(matches(withText("HELLO")));
 
 //        onView(withId(R.id.browseBtn)).perform(click()); // press the browse button
 //        onData(withId(R.id.)).check(matches(withText("Pancakes")));
@@ -129,6 +165,20 @@ public class MainActivityTest {
         onView(withId(R.id.browseBtn)).perform(click());
         intended(allOf(
                 hasComponent(BrowseActivity.class.getName()),
+                toPackage("com.example.shalisa.recipebox")
+        ));
+    }
+
+    /**
+     * Test that LoginActivity is intended when the
+     * logout button is clicked.
+     */
+    @Test
+    public void testMainActivityLogoutButton_toLoginActivityOnClick() {
+        onView(withId(R.id.logoutBtn)).check(matches(isClickable()));
+        onView(withId(R.id.logoutBtn)).perform(click());
+        intended(allOf(
+                hasComponent(LoginActivity.class.getName()),
                 toPackage("com.example.shalisa.recipebox")
         ));
     }

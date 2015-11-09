@@ -3,7 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="menu_space">10dp</dimen>
-    <dimen name="menu_text_size">30sp</dimen>
+    <dimen name="menu_text_size">25sp</dimen>
     <dimen name="menu_button_margin">4dp</dimen>
     <dimen name="menu_button_padding">10dp</dimen>
     <dimen name="browse_text_size">20sp</dimen>

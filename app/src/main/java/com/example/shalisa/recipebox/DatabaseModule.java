@@ -6,16 +6,16 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module( injects = {BrowseActivity.class} )
-public class RecipeDatabaseModule {
+public class DatabaseModule {
 
     public static boolean mockMode;
 
     @Provides
     @Singleton
-    public RecipeDatabase provideDatabase() {
+    public Database provideDatabase() {
         if (mockMode) {
-            return new MockRecipeDatabaseHelper();
-        } return new RecipeDatabaseHelper();
+            return MockRecipeDatabase.getInstance();
+        } return RecipeDatabase.getInstance();
     }
 
 }

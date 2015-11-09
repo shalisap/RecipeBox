@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 /**
  * Class to represent a single ingredient (in a recipe),
- * including quantity and unit.
+ * including quantity, unit, and name.
  *
  * An Ingredient object consists of:
  *      * quantity - amount of the ingredient as a double
@@ -31,7 +31,7 @@ public class Ingredient implements Parcelable {
      * @param name The name of the ingredient.
      */
     public Ingredient(double quantity, Unit unit, String name) {
-        if (quantity < 0) {
+        if (quantity <= 0) {
             throw new IllegalArgumentException();
         }
         this.quantity = quantity;
@@ -40,7 +40,7 @@ public class Ingredient implements Parcelable {
     }
 
     /**
-     * Returns the quantity (double) field of Ingredient.
+     * Getter for quantity
      * @return Double quantity of the ingredient.
      */
     public double getQuantity() {
@@ -48,22 +48,49 @@ public class Ingredient implements Parcelable {
     }
 
     /**
-     * Returns the name of the ingredient.
+     * Getter for name
      * @return String name of the ingredient.
      */
     public String getName() {
-        return name;
+        return name.toLowerCase();
+    }
+
+    /**
+     * Returns the formatted fraction as a string of the quantity.
+     * @return A string fraction representation of the quantity.
+     */
+    public String getQuantityString() {
+        return quantityToFractionString(quantity);
+    }
+
+    /**
+     * @return String representation of the
+     *      unit of measurement.
+     */
+    public String getUnitString() {
+        return unitToString(unit, quantity);
+    }
+
+    /**
+     * Returns the string representation of
+     * the ingredient as:
+     *      "quantity_as_a_fraction unit_as_a_string name"
+     * @return Ingredient as a string
+     */
+    public String toString() {
+        return String.format("%s %s %s",
+                getQuantityString(), getUnitString(), getName());
     }
 
     /**
      * Given a double, converts to a fraction string[]
      * consisting of [integer, numerator, denominator]
      * where any value of 0 is represented by the empty string.
-     *
+     * @quantity Quantity of ingredient
      * @return A string[] representation of the quantity
      *      where [integer, numerator, denominator].
      */
-    public String[] doubleToFractionString(double quantity) {
+    public static String[] doubleToFractionString(double quantity) {
         String[] fraction = new String[3];
 
         double q = quantity;
@@ -93,16 +120,19 @@ public class Ingredient implements Parcelable {
     /**
      * Converts a double to a fraction string and returns
      * the formatted fraction as a string.
+     * @quantity Quantity of ingredient
      * @return A string fraction representation of the quantity.
      */
-    public String getQuantityString() {
+    public static String quantityToFractionString(double quantity) {
         String[] fractionArr = doubleToFractionString(quantity);
         StringBuilder fractionStr = new StringBuilder();
         if (fractionArr[0] != "") {
             fractionStr.append(fractionArr[0]);
-            fractionStr.append(" ");
         }
         if (fractionArr[1] != "" && fractionArr[2] != "") {
+            if (fractionArr[0] != "") {
+                fractionStr.append(" ");
+            }
             fractionStr.append(fractionArr[1]);
             fractionStr.append("/");
             fractionStr.append(fractionArr[2]);
@@ -110,10 +140,11 @@ public class Ingredient implements Parcelable {
     }
 
     /**
+     * @param unit Unit of measurement
      * @return String representation of the
      *      unite of measurement.
      */
-    public String getUnitString() {
+    public static String unitToString(Unit unit, double quantity) {
         String unitStr = "";
         switch(unit) {
             case PINCH:
@@ -151,17 +182,6 @@ public class Ingredient implements Parcelable {
     }
 
     /**
-     * Returns the string representation of
-     * the ingredient as:
-     *      "quantity_as_a_fraction unit_as_a_string name"
-     * @return Ingredient as a string
-     */
-    public String toString() {
-        return String.format("%s %s %s",
-                getQuantityString(), getUnitString(), getName());
-    }
-
-    /**
      * @param str Unit represented as a String.
      * @return Unit
      */
@@ -180,9 +200,10 @@ public class Ingredient implements Parcelable {
             case "cups":
                 return Unit.CUP;
             case "ounce":
+            case "ounces":
                 return Unit.OUNCE;
             case "pint":
-            case "ounces":
+            case "pints":
                 return Unit.PINT;
             case "quart":
             case "quarts":

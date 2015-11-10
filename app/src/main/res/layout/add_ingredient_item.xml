@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/addIngredientItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/addIngredientQuantityItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1" android:singleLine="true"
+            android:hint="Quantity" />
+
+        <Spinner
+            android:id="@+id/addIngredientUnitItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/addIngredientNameItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1" android:singleLine="true"
+            android:hint="Name" />
+
+    </LinearLayout>

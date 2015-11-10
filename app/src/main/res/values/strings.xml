@@ -12,6 +12,10 @@
     <string name="add_recipe_name">Recipe Name</string>
     <string name="add_recipe_img">Recipe Image URL</string>
     <string name="add_recipe_btn">Add Recipe</string>
+    <string name="add_another_ing_btn">Another Ingredient</string>
+    <string name="delete_another_ing_btn">Delete Ingredient</string>
+    <string name="add_another_inst_btn">Another Instruction</string>
+    <string name="delete_another_inst_btn">Delete Instruction</string>
 
     <!-- Strings related to login -->
     <string name="prompt_username">Username</string>

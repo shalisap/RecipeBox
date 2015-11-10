@@ -27,16 +27,16 @@
         android:text="@string/browse_text" />
 
     <Button
-        android:id="@+id/favoritesBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/favorites_text"/>
-
-    <Button
         android:id="@+id/addRecipeBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/add_recipe_text"/>
+
+    <Button
+        android:id="@+id/favoritesBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/favorites_text"/>
 
     <Button
         android:id="@+id/logoutBtn"

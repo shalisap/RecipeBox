@@ -39,16 +39,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // When clicking favorites button
-        View favButton = findViewById(R.id.favoritesBtn);
-        favButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TextView app_text = (TextView) findViewById(R.id.welcomeText);
-                app_text.setText("HELLO");
-            }
-        });
-
         // Add new recipe
         View addButton = findViewById(R.id.addRecipeBtn);
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -56,6 +46,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AddRecipeActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        // When clicking favorites button
+        View favButton = findViewById(R.id.favoritesBtn);
+        favButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TextView app_text = (TextView) findViewById(R.id.welcomeText);
+                app_text.setText("HELLO");
             }
         });
 
